@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="user">
+
+    <insert id="register" parameterType="userVo">
+        insert into users(EMAIL,
+                            PASSWORD,
+                            NAME,
+                            PHONENUM,
+                            REGID,
+                            IMG)
+                  values(#{email}, #{password}, #{name}, #{phoneNum}, #{regId}, #{img})
+    </insert>
+
+    <select id="usersByUsernameQuery" parameterType="java.lang.String" resultType="userVo">
+        SELECT EMAIL,
+                PASSWORD,
+                NAME,
+                PHONENUM,
+                ENABLED,
+                REGID,
+                IMG
+          FROM users WHERE email= #{email}
+    </select>
+
+    <select id="users" parameterType="java.lang.String" resultType="userVo">
+        <![CDATA[select EMAIL,
+                         NAME,
+                         PHONENUM,
+                         REGID,
+                         IMG
+                    from users where email <> #{email}]]>
+    </select>
+
+    <select id="authoritiesByUsernameQuery" parameterType="java.lang.String" resultType="java.util.Map">
+        select b.authority from users a inner join user_roles b on a.email = b.email and a.email = #{email}
+    </select>
+</mapper>
