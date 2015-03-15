@@ -67,6 +67,39 @@
             text-align: center;
             padding-top:10px;
         }
+
+        .chat-detail {
+            padding: 12px;
+            height: 100px;
+        }
+
+        .chat-detail .chat-date {
+            position: relative;
+            bottom: 50px;
+            left: 85%;
+        }
+
+        .chat-detail .chat-content {
+            position: relative;
+            right: 25px;
+            background-color: #a5d8c7;
+            padding: 7px;
+            bottom: 20px;
+            left: 50px;
+            width: 65%;
+        }
+
+        .chat-detail .chat-name {
+            position: relative;
+            bottom: 15px;
+            padding-left:8px;
+        }
+
+        .chat-detail .chat-face img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%
+        }
     </style>
 </head>
 <body>
@@ -98,7 +131,28 @@
 </div>
 <%-- end --%>
 <div class="chat-body">
-    <div id="chat" style="width:100%; height:91.9%"></div>
+    <div id="chat" style="width:100%; height:91.9%">
+        <div class="chat-detail">
+            <span class="chat-face">
+                <img src="/resources/img/face.png">
+            </span>
+            <span class="chat-name">
+                승연
+            </span>
+            <p class="chat-content">안녕하세요 조진우입니다. 잘지내시죠??? 알겠습니다.</p>
+            <span class="chat-date">22:20</span>
+        </div>
+        <div class="chat-detail">
+            <span class="chat-face">
+                <img src="/resources/img/face.png">
+            </span>
+            <span class="chat-name">
+                승연
+            </span>
+            <p class="chat-content">안녕하세요</p>
+            <span class="chat-date">22:20</span>
+        </div>
+    </div>
     <div id="input" style="position:absolute; margin:3px">
         <div class="emo-chat">
             <img src="/resources/emoticon/sinjjang/1.gif">
