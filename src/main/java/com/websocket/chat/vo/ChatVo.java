@@ -18,17 +18,20 @@ public class ChatVo {
     private String from;
     private List to;
     private String msg;
+    private String roomId;
 
     public ChatVo() {
     }
 
-    public ChatVo(String from, List to, String msg) {
+    public ChatVo(String from, List to, String msg, String roomId) {
         this.from = from;
         this.to = to;
         this.msg = msg;
+        this.roomId = roomId;
     }
 
     public String getFrom() {
+
         return from;
     }
 
@@ -50,5 +53,13 @@ public class ChatVo {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
     }
 }

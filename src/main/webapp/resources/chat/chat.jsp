@@ -8,6 +8,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <sec:authentication property="principal.email" var="email"/>
+<sec:authentication property="principal.name" var="name"/>
 <html>
 <head>
     <title>Simple Web Chatting</title>
@@ -72,7 +73,7 @@
             display: flex;
         }
 
-        .chat-detail-head {
+        .chat-detail > .chat-detail-head {
             float: left;
             padding: 12px 0px 12px 12px;
         }
@@ -81,12 +82,12 @@
             padding: 12px 0px 12px 12px;
             width: 85%;
         }
-        .chat-detail-body > .content > .msg {
+        .chat-detail > .chat-detail-body > .content > .msg {
             padding: 10px;
             background-color: azure;
             float: left;
         }
-        .chat-detail-body > .content > .date {
+        .chat-detail > .chat-detail-body > .content > .date {
             float: left;
             position: absolute;
             padding: 5px 5px 5px 20px;
@@ -135,19 +136,26 @@
                 </span>
             </div>
             <div class="chat-detail-body">
-                <div>
+                <div class="name">
                     <span>
-                        승연
                     </span>
                 </div>
-                <div>
-                    <img src="/resources/emoticon/poi/1.gif" style="width:100px"/>
+                <div style="width:100px;">
+                    <img src="" />
                 </div>
                 <div class="content">
                     <p class="msg">
-                        머?
+123
                     </p>
-                    <span class="date">23:23</span>
+                    <span class="date">22:20</span>
+                </div>
+            </div>
+        </div>
+        <div class="chat-detail-reverse">
+            <div class="chat-detail-body">
+                <div class="content">
+                    <p class="msg pull-right" style="padding-right:10px">123</p>
+                    <span class="date pull-right">22:20</span>
                 </div>
             </div>
         </div>
@@ -166,6 +174,21 @@
     </div>
 </div>
 <script>
+    $.receive = function(message) {
+        var json = JSON.parse(message.body);
+        var clone = $('.chat-detail.hide').clone().removeClass('hide');
+        clone.find('.content>.msg').text(json.msg);
+        if(json.from == '${email}') {
+            clone.find('.chat-detail-body').addClass("pull-right");
+            clone.find('.chat-detail-head').addClass('hide');
+            clone.find('.name > span').text('${name}');
+        } else {
+            clone.find('.name > span').text(json.to[0].name);
+        }
+
+        $('.chat-body').append(clone);
+    }
+
     $.emoticonChange = function() {
         var emoPage = $('#emoKind > .active > a').attr('page');
         var emoLength = $(".emo-paging > .active").index();
@@ -182,8 +205,9 @@
         var msg = $('#msg').val();
         $('#msg').val('');
         var to = "${param.get("to")}";
-        var message = {"from":'${email}', 'to':['${email}', to], 'msg':msg};
-        stomp.send("/app/msg/"+ to, {}, JSON.stringify(message));
+        var name = "${param.get("name")}"
+        var message = {"from":'${email}', 'to':[{'email':to, 'name':name}], 'msg':msg};
+        stomp.send("/app/msg", {}, JSON.stringify(message));
     }
 
     $('.send-btn').on('click', function() {

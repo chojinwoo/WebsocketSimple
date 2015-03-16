@@ -34,7 +34,6 @@ public class UserController {
         List list = this.userService.users(principal.getName());
         JSONObject jo = new JSONObject();
         jo.put("json", list);
-        System.out.println(jo.toString());
         return jo.toString();
     }
 

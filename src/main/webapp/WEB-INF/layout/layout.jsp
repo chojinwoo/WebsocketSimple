@@ -43,7 +43,7 @@
             stomp.connect([], function(frame) {
                 console.log(frame);
                 stomp.subscribe("/user/topic/msg", function(message) {
-                    alert(message);
+                    $.receive(message);
                 });
 
                 stomp.subscribe("/user/queue/errors", function(message) {

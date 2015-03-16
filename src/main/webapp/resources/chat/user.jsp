@@ -81,7 +81,8 @@
 
         $('.chat-icon').on('click', function() {
             var to = $(this).closest('div').find('#to').val();
-            $('#load-body').load("/resources/chat/chat.jsp", {"to":to});
+            var name = $(this).closest('div').find('span:eq(1)').text();
+            $('#load-body').load("/resources/chat/chat.jsp", {"to":to, "name":name});
         })
 
     })
