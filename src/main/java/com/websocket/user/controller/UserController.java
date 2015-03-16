@@ -2,6 +2,7 @@ package com.websocket.user.controller;
 
 import com.websocket.user.service.UserService;
 import com.websocket.user.vo.UserVo;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ public class UserController {
 
     @RequestMapping(value="/user", method=RequestMethod.POST)
     @ResponseBody
-    public String user(Principal principal) {
+    public String user(Principal principal) throws JSONException {
         List list = this.userService.users(principal.getName());
         JSONObject jo = new JSONObject();
         jo.put("json", list);
