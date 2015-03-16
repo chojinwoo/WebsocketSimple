@@ -77,7 +77,7 @@
             float: left;
             padding: 12px 0px 12px 12px;
         }
-        .chat-detail-body {
+        .chat-detail > .chat-detail-body {
             float: left;
             padding: 12px 0px 12px 12px;
             width: 85%;
@@ -97,6 +97,24 @@
             width: 40px;
             height: 40px;
             border-radius: 50%
+        }
+
+        .chat-detail-reverse > .chat-detail-body {
+            float: right;
+            padding: 12px 0px 12px 12px;
+            padding-left:15%;
+            width: 85%;
+        }
+
+        .chat-detail-reverse > .chat-detail-body > .content > .msg {
+            padding: 10px;
+            background-color: azure;
+            width: 90%;
+        }
+
+        .chat-detail-reverse > .chat-detail-body > .content > .date {
+            width: 5%;
+            padding: 5px 60px 5px 5px;
         }
     </style>
 </head>
@@ -136,8 +154,9 @@
                 </span>
             </div>
             <div class="chat-detail-body">
-                <div class="name">
+                <div class="name" style="font-weight: bold;">
                     <span>
+                        승연
                     </span>
                 </div>
                 <div style="width:100px;">
