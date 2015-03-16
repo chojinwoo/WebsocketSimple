@@ -57,8 +57,8 @@
     </script>
     <style>
         .chat-body {
-            padding-top:59px;
-            border: 1px solid grey;
+            padding-top:60px;
+            padding-bottom:60px;
             height:100%;
         }
     </style>

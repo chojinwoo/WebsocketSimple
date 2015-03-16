@@ -15,7 +15,7 @@ public class UserVo implements UserDetails{
     private String password;
     private String name;
     private String phoneNum;
-    private String img;
+    private String img = "";
     private String regId;
     private HashSet<GrantedAuthority> authorities;
     private boolean ACCOUNTNONEXPIRED = true;

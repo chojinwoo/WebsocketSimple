@@ -12,8 +12,8 @@
         <security:form-login login-page="/" username-parameter="email" password-parameter="password" always-use-default-target="true" default-target-url="/main"
                              login-processing-url="/login" />
         <security:logout delete-cookies="JSESSIONID" logout-url="/logout" logout-success-url="/"/>
-        <security:session-management invalid-session-url="/login_filed">
-            <security:concurrency-control max-sessions="1" expired-url="/login_expired"/>
+        <security:session-management>
+            <security:concurrency-control max-sessions="1"/>
         </security:session-management>
         <security:remember-me data-source-ref="dataSource" remember-me-parameter="remember-me" token-validity-seconds="365000"/>
     </security:http>

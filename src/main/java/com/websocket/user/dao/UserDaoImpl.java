@@ -23,7 +23,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public int register(UserVo userVo) {
-        return this.sqlSessionTemplate.insert("user.register", userVo);
+        int flag = this.sqlSessionTemplate.insert("user.register", userVo);
+        if(flag == 1) {
+            flag = this.sqlSessionTemplate.insert("user.register_auth", userVo);
+        }
+        return flag;
+
     }
 
     @Override

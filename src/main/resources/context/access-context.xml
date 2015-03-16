@@ -7,13 +7,30 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
-    <util:properties id="db" location="classpath:properties/db.properties"/>
 
-    <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource">
-        <property name="username" value="#{db['jdbc.usernmae']}"/>
-        <property name="password" value="#{db['jdbc.password']}"/>
-        <property name="driverClassName" value="#{db['jdbc.driver']}"/>
-        <property name="url" value="#{db['jdbc.url']}"/>
+    <!--local-->
+    <!--<util:properties id="db" location="classpath:properties/db.properties"/>-->
+
+    <!--<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource">-->
+        <!--<property name="username" value="#{db['jdbc.usernmae']}"/>-->
+        <!--<property name="password" value="#{db['jdbc.password']}"/>-->
+        <!--<property name="driverClassName" value="#{db['jdbc.driver']}"/>-->
+        <!--<property name="url" value="#{db['jdbc.url']}"/>-->
+    <!--</bean>-->
+
+    <!--server-->
+    <bean class="java.net.URI" id="dbUrl">
+        <constructor-arg value="mysql://be90b185f1099d:2faa6919@us-cdbr-iron-east-02.cleardb.net/heroku_2528e6c0431d4e2?reconnect=true"/>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="url" value="#{ 'jdbc:mysql://' + @dbUrl.getHost() + @dbUrl.getPath()}?autoReconnect=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;characterSetResults=utf8&amp;connectionCollation=utf8_general_ci"/>
+        <property name="driverClassName" value="core.log.jdbc.driver.MysqlDriver"/>
+        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }"/>
+        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }"/>
+        <property name="maxActive" value="20"/>
+        <property name="maxIdle" value="10"/>
+        <property name="maxWait" value="-1"/>
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>

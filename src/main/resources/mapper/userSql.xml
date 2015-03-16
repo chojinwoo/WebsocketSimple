@@ -12,6 +12,11 @@
                   values(#{email}, #{password}, #{name}, #{phoneNum}, #{regId}, #{img})
     </insert>
 
+    <insert id="register_auth" parameterType="userVo">
+        insert into user_roles(email, authority)
+                  values(#{email}, 'ROLE_USER')
+    </insert>
+
     <select id="usersByUsernameQuery" parameterType="java.lang.String" resultType="userVo">
         SELECT EMAIL,
                 PASSWORD,
