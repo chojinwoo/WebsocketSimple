@@ -68,54 +68,6 @@
             text-align: center;
             padding-top:10px;
         }
-
-        .chat-detail {
-            display: flex;
-        }
-
-        .chat-detail > .chat-detail-head {
-            float: left;
-            padding: 12px 0px 12px 12px;
-        }
-        .chat-detail > .chat-detail-body {
-            float: left;
-            padding: 12px 0px 12px 12px;
-            width: 85%;
-        }
-        .chat-detail > .chat-detail-body > .content > .msg {
-            padding: 10px;
-            background-color: azure;
-            float: left;
-        }
-        .chat-detail > .chat-detail-body > .content > .date {
-            float: left;
-            position: absolute;
-            padding: 5px 5px 5px 20px;
-        }
-
-        .chat-detail .chat-face img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%
-        }
-
-        .chat-detail-reverse > .chat-detail-body {
-            float: right;
-            padding: 12px 0px 12px 12px;
-            padding-left:15%;
-            width: 85%;
-        }
-
-        .chat-detail-reverse > .chat-detail-body > .content > .msg {
-            padding: 10px;
-            background-color: azure;
-            width: 90%;
-        }
-
-        .chat-detail-reverse > .chat-detail-body > .content > .date {
-            width: 5%;
-            padding: 5px 60px 5px 5px;
-        }
     </style>
 </head>
 <body>
@@ -146,39 +98,26 @@
     </div>
 </div>
 <%-- end --%>
+<style>
+    .chat-detail > div {
+        padding:12px
+    }
+</style>
 <div class="chat-body">
-        <div class="chat-detail">
-            <div class="chat-detail-head">
-                <span class="chat-face">
-                    <img src="/resources/img/face.png">
-                </span>
-            </div>
-            <div class="chat-detail-body">
-                <div class="name" style="font-weight: bold;">
-                    <span>
-                        승연
-                    </span>
-                </div>
-                <div style="width:100px;">
-                    <img src="" />
-                </div>
-                <div class="content">
-                    <p class="msg">
-123
-                    </p>
-                    <span class="date">22:20</span>
-                </div>
-            </div>
+    <div class="chat-detail">
+        <div class="pull-left" style="width:10%;">
+            <img src="/resources/img/face.png" style="width:40px;border-radius: 50%">
         </div>
-        <div class="chat-detail-reverse">
-            <div class="chat-detail-body">
-                <div class="content">
-                    <p class="msg pull-right" style="padding-right:10px">123</p>
-                    <span class="date pull-right">22:20</span>
-                </div>
-            </div>
+        <div class="pull-left" style="margin-left:10px;width:80%;">
+            <div>1</div>
+            <div><img src="/resources/emoticon/sinjjang/1.gif" style="width:100px"></div>
+            <div class="pull-left" style="background-color: aqua;padding: 5px;max-width:80%;">안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕</div>
+            <div class="pull-left">22:22</div>
         </div>
     </div>
+    <%--<blockquote class="blockquote-reverse">--%>
+        <%--asdf--%>
+    <%--</blockquote>--%>
     <div id="input" style="position:fixed; bottom: 0px;">
         <div class="emo-chat">
             <img src="/resources/emoticon/sinjjang/1.gif">
@@ -194,6 +133,7 @@
 </div>
 <script>
     $.receive = function(message) {
+        alert();
         var json = JSON.parse(message.body);
         var clone = $('.chat-detail.hide').clone().removeClass('hide');
         clone.find('.content>.msg').text(json.msg);
