@@ -3,12 +3,12 @@
 <mapper namespace="user">
 
     <insert id="register" parameterType="userVo">
-        insert into users(EMAIL,
-                            PASSWORD,
-                            NAME,
-                            PHONENUM,
-                            REGID,
-                            IMG)
+        insert into users(email,
+                            password,
+                            name,
+                            phonenum,
+                            regid,
+                            img)
                   values(#{email}, #{password}, #{name}, #{phoneNum}, #{regId}, #{img})
     </insert>
 
@@ -18,22 +18,22 @@
     </insert>
 
     <select id="usersByUsernameQuery" parameterType="java.lang.String" resultType="userVo">
-        SELECT EMAIL,
-                PASSWORD,
-                NAME,
-                PHONENUM,
-                ENABLED,
-                REGID,
-                IMG
+        SELECT email,
+                password,
+                name,
+                phonenum,
+                enabled,
+                regid,
+                img
           FROM users WHERE email= #{email}
     </select>
 
     <select id="users" parameterType="java.lang.String" resultType="java.util.HashMap">
-        <![CDATA[select EMAIL,
-                         NAME,
-                         PHONENUM,
-                         REGID,
-                         IMG
+        <![CDATA[select email,
+                         name,
+                         phonenum,
+                         regid,
+                         img
                     from users where email <> #{email}]]>
     </select>
 
