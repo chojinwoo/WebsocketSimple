@@ -28,7 +28,7 @@
           FROM users WHERE email= #{email}
     </select>
 
-    <select id="users" parameterType="java.lang.String" resultType="userVo">
+    <select id="users" parameterType="java.lang.String" resultType="java.util.HashMap">
         <![CDATA[select EMAIL,
                          NAME,
                          PHONENUM,
