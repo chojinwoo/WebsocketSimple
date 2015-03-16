@@ -2,7 +2,7 @@ package com.websocket.user.controller;
 
 import com.websocket.user.service.UserService;
 import com.websocket.user.vo.UserVo;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +34,7 @@ public class UserController {
         List list = this.userService.users(principal.getName());
         JSONObject jo = new JSONObject();
         jo.put("json", list);
+        System.out.println(jo.toString());
         return jo.toString();
     }
 
