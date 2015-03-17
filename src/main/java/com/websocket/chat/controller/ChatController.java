@@ -62,8 +62,6 @@ public class ChatController {
             simpMessagingTemplate.convertAndSend("/user/" + user.get("email")+ "/topic/msg", chatVo);
         }
         simpMessagingTemplate.convertAndSend("/user/" + chatVo.getFrom()+ "/topic/msg", chatVo);
-        System.out.println(myRoomMap);
-        System.out.println(roomMap.toString());
     }
 
     @RequestMapping(value="/chatInit", method = RequestMethod.POST)
@@ -74,11 +72,16 @@ public class ChatController {
 
         if(roomList != null) {
             for(HashMap room : roomList) {
-                String room_to = (String) room.get("email");
+                String room_to = (String) room.get("to");
                 if(room_to.equals(to)) {
                     String roomId = (String) room.get("room");
-                    List msgLIst = (List) roomMap.get(roomId);
-                    ja.addAll(msgLIst);
+                    List<HashMap> msgList = (List) roomMap.get(roomId);
+                    for(HashMap msg : msgList) {
+                        if(!msg.get("from").equals(principal.getName())) {
+                            msg.put("flag", "0");
+                        }
+                    }
+                    ja.addAll(msgList);
                 }
             }
         }
@@ -86,10 +89,50 @@ public class ChatController {
         return ja.toString();
     }
 
+    @RequestMapping(value="/listInit", method = RequestMethod.POST)
+    @ResponseBody
+    public String listInit(Principal principal) {
+        List newList = new LinkedList();
+
+        System.out.println(myRoomMap.toString());
+        System.out.println(roomMap.toString());
+        JSONArray ja = new JSONArray();
+        List<HashMap> roomList = (List) myRoomMap.get(principal.getName());
+        if(roomList != null) {
+            for(HashMap room : roomList) {
+                HashMap newMap = new HashMap();
+                int flagCnt = 0;
+                newMap.put("name", room.get("name"));
+                newMap.put("to", room.get("to"));
+                newMap.put("room", room.get("room"));
+                List<HashMap> msgList = (List) roomMap.get(room.get("room"));
+                for(int i=0; i<msgList.size(); i++) {
+                    HashMap msg = msgList.get(i);
+                    if(msg.get("flag").equals("1")) {
+                        if(!msg.get("from").equals(principal.getName())) {
+                            ++flagCnt;
+                        }
+
+                    }
+                    if(i == (msgList.size() -1)) {
+                        HashMap lastMsg = msgList.get(msgList.size()-1);
+                        newMap.put("msg", lastMsg.get("msg"));
+                        newMap.put("date", lastMsg.get("date"));
+                        newMap.put("flagCnt", flagCnt);
+                    }
+                }
+
+                newList.add(newMap);
+            }
+        }
+        ja.addAll(newList);
+        return ja.toString();
+    }
+
     public void createRoom(ChatVo chatVo) {
-        if(chatVo.getRoomId() == null) {
+        if(chatVo.getRoom() == null || chatVo.getRoom() == "") {
             String uuid = UUID.randomUUID().toString();
-            chatVo.setRoomId(uuid);
+            chatVo.setRoom(uuid);
             List<HashMap> userLIst = chatVo.getTo();
 
             HashMap map = null;
@@ -100,7 +143,7 @@ public class ChatController {
                     roomList = new LinkedList();
                 }
                 map = new HashMap();
-                map.put("email", chatVo.getFrom());
+                map.put("to", chatVo.getFrom());
                 map.put("name", chatVo.getFromName());
                 map.put("room", uuid);
                 roomList.add(map);
@@ -112,7 +155,7 @@ public class ChatController {
                 }
 
                 map = new HashMap();
-                map.put("email", user.get("email"));
+                map.put("to", user.get("email"));
                 map.put("name", user.get("name"));
                 map.put("room", uuid);
                 roomList.add(map);
@@ -123,12 +166,12 @@ public class ChatController {
 
     public void addMessage(ChatVo chatVo) {
         JSONObject jo = new JSONObject();
-        List msgList = (List) roomMap.get(chatVo.getRoomId());
+        List msgList = (List) roomMap.get(chatVo.getRoom());
         if(msgList == null) {
             msgList = new LinkedList<String>();
         }
         msgList.add(Converter.converObjectToMap(chatVo));
-        roomMap.put(chatVo.getRoomId(), msgList);
+        roomMap.put(chatVo.getRoom(), msgList);
     }
 
 }

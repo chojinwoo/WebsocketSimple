@@ -47,7 +47,7 @@
     <input type="hidden" id="to" name="to" value="">
     <span><img class="user-view" src=""></span>
     <span></span>
-    <span class="pull-right"><i class="fa fa-weixin chat-icon"></i></span>
+    <span class="pull-right" style="height: 80%;"><i class="fa fa-weixin chat-icon"></i></span>
 </div>
 <div class="group"><span>나</span></div>
 <div class="list">
@@ -67,8 +67,9 @@
                     var clone = $('.chat-body .list:first').clone();
                     clone.removeClass('hide')
                     clone.find('input').val(this.email);
-                    clone.find('span:first img').attr('src', '/resources/img/face.png');
+                    clone.find('span:first .user-view').attr('src', '/resources/img/face.png');
                     clone.find('span:eq(1)').text(this.name);
+                    $('#room').val(this.room);
                     $('.chat-body').append(clone);
                 })
             }, error:function(xhr, status, error) {
@@ -79,6 +80,7 @@
         $('.chat-icon').on('click', function() {
             var to = $(this).closest('div').find('#to').val();
             var name = $(this).closest('div').find('span:eq(1)').text();
+            $('.chat-header .fa').removeClass('active');
             $('.chat-body').load("/resources/chat/chat.jsp", {"to":to, "name":name});
         })
 

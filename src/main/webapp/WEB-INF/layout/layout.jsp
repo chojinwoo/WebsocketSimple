@@ -46,6 +46,7 @@
                 stomp.subscribe("/user/topic/msg", function(message) {
                     var json = JSON.parse(message.body);
                     $.receive(json);
+                    $.listSet();
                 });
 
                 stomp.subscribe("/user/queue/errors", function(message) {
@@ -59,7 +60,7 @@
     </script>
     <style>
         .chat-body {
-            padding-top: 60px;
+            padding-top: 50px;
             padding-bottom: 50px;
             position: absolute;
             width: 100%;
@@ -101,7 +102,14 @@
         $('.chat-body').load("/resources/chat/user.jsp");
 
         $('.chat-header .fa-user').on('click' , function() {
+            $('.chat-header .fa').removeClass('active');
+            $(this).addClass('active');
             $('.chat-body').load("/resources/chat/user.jsp");
+        })
+        $('.chat-header .fa-weixin').on('click' , function() {
+            $('.chat-header .fa').removeClass('active');
+            $(this).addClass('active');
+            $('.chat-body').load("/resources/chat/list.jsp");
         })
     })
 </script>

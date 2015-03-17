@@ -11,7 +11,6 @@
     <title></title>
 </head>
 <body>
-
     <span><i class="fa fa-user active"></i></span>
     <span><i class="fa fa-weixin"></i></span>
     <span class="pull-right"><i class="fa fa-users"></i></span>

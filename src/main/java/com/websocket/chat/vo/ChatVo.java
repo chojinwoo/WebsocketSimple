@@ -20,7 +20,7 @@ public class ChatVo {
     private List to;
     private String msg;
     private String emoticon;
-    private String roomId;
+    private String room;
     private String date;
     private String time;
     private String flag;
@@ -28,19 +28,20 @@ public class ChatVo {
     public ChatVo() {
     }
 
-    public ChatVo(String from, String fromName, List to, String msg, String emoticon, String roomId, String date, String time, String flag) {
+    public ChatVo(String from, String fromName, List to, String msg, String emoticon, String room, String date, String time, String flag) {
         this.from = from;
         this.fromName = fromName;
         this.to = to;
         this.msg = msg;
         this.emoticon = emoticon;
-        this.roomId = roomId;
+        this.room = room;
         this.date = date;
         this.time = time;
         this.flag = flag;
     }
 
     public String getFrom() {
+
         return from;
     }
 
@@ -80,12 +81,12 @@ public class ChatVo {
         this.emoticon = emoticon;
     }
 
-    public String getRoomId() {
-        return roomId;
+    public String getRoom() {
+        return room;
     }
 
-    public void setRoomId(String roomId) {
-        this.roomId = roomId;
+    public void setRoom(String room) {
+        this.room = room;
     }
 
     public String getDate() {

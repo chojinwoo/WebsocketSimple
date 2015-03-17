@@ -127,6 +127,7 @@
         text-align: right;
     }
 </style>
+<input type="hidden" id="room" name="room">
 <div id="toChat" class="chat-detail hide">
     <div class="pull-left" style="  width: 40px;">
         <img src="/resources/img/face.png" style="width:40px;border-radius: 50%">
@@ -185,6 +186,7 @@
             var img = $('<img>').attr('src', json.emoticon).css('width', '100px');
             clone.find('.emoticon').append(img);
         }
+        $('#room').val(json.room);
         clone.find('.content').text(json.msg);
         clone.find('.date').text(json.time);
         $('.chat-body').append(clone);
@@ -208,8 +210,13 @@
         var to = "${param.get("to")}";
         var name = "${param.get("name")}"
         var emoticon = $('.emo-chat > img').attr('src');
-        var message = {"from":'${email}', "fromName":'${name}', 'to':[{'email':to, 'name':name}], 'msg':msg , 'emoticon':emoticon};
+        var room = $('#room').val();
+        var message = {"from":'${email}', "fromName":'${name}', 'to':[{'email':to, 'name':name}], 'msg':msg , 'room':room,'emoticon':emoticon};
         stomp.send("/app/msg", {}, JSON.stringify(message));
+    }
+
+    $.flagChk = function() {
+
     }
 
     $('.send-btn').on('click', function() {
