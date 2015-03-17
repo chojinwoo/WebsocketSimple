@@ -102,17 +102,48 @@
     .chat-detail > div {
         padding:12px
     }
+
+    #toChat .content {
+        background-color: aqua;
+        padding: 5px;
+        max-width: 80%;
+    }
+
+    #toChat .date {
+        padding-left:15px;
+    }
+
+    #fromChat .content {
+        background-color: aqua;
+        padding: 5px;
+        max-width: 80%;
+    }
+
+    #fromChat .date {
+        padding-right:15px;
+    }
+
+    #fromChat .emoticon {
+        text-align: right;
+    }
 </style>
 <div class="chat-body">
-    <div class="chat-detail">
-        <div class="pull-left" style="width:10%;">
+    <div id="toChat" class="chat-detail hide">
+        <div class="pull-left" style="  width: 50px;">
             <img src="/resources/img/face.png" style="width:40px;border-radius: 50%">
         </div>
         <div class="pull-left" style="margin-left:10px;width:80%;">
             <div>1</div>
-            <div><img src="/resources/emoticon/sinjjang/1.gif" style="width:100px"></div>
-            <div class="pull-left" style="background-color: aqua;padding: 5px;max-width:80%;">안녕안녕안녕안녕안녕안녕안녕안녕안녕안녕</div>
-            <div class="pull-left">22:22</div>
+            <div class="emoticon"><img style="width:100px"></div>
+            <div class="pull-left content"></div>
+            <div class="pull-left date"></div>
+        </div>
+    </div>
+    <div id="fromChat" class="chat-detail hide">
+        <div class="pull-right" style="margin-left:10px;width:80%;">
+            <div class="emoticon"><img style="width:100px"></div>
+            <div class="pull-right content"></div>
+            <div class="pull-right date"></div>
         </div>
     </div>
     <%--<blockquote class="blockquote-reverse">--%>
@@ -120,7 +151,7 @@
     <%--</blockquote>--%>
     <div id="input" style="position:fixed; bottom: 0px;">
         <div class="emo-chat">
-            <img src="/resources/emoticon/sinjjang/1.gif">
+            <img src="">
             <span class="glyphicon glyphicon-remove-sign emo-cancel"></span>
         </div>
         <div class="input-group" style="background-color:#F0F0F0;height:42px;padding:4px 0px 4px 32px;">
@@ -132,19 +163,33 @@
     </div>
 </div>
 <script>
-    $.receive = function(message) {
-        alert();
-        var json = JSON.parse(message.body);
-        var clone = $('.chat-detail.hide').clone().removeClass('hide');
-        clone.find('.content>.msg').text(json.msg);
-        if(json.from == '${email}') {
-            clone.find('.chat-detail-body').addClass("pull-right");
-            clone.find('.chat-detail-head').addClass('hide');
-            clone.find('.name > span').text('${name}');
-        } else {
-            clone.find('.name > span').text(json.to[0].name);
-        }
+    $(document).ready(function() {
+        $.ajax({
+            url:'/chatInit',
+            dataType:'json',
+            type:'post',
+            data:'to=${param.get("to")}',
+            success:function(data) {
+                alert(JSON.stringify(data));
+            }, error:function(xhr, status, error) {
+                alert(error);
+            }
+        })
+    })
 
+    $.receive = function(message) {
+        var json = JSON.parse(message.body);
+        var clone = '';
+        if(json.from == '${email}') {
+            clone = $('#fromChat').clone().removeClass('hide');
+        } else {
+            clone =$('#toChat').clone().removeClass('hide');
+        }
+        if(json.emoticon != '') {
+            clone.find('.emoticon img').attr('src', json.emoticon);
+        }
+        clone.find('.content').text(json.msg);
+        clone.find('.date').text(json.time);
         $('.chat-body').append(clone);
     }
 
@@ -165,7 +210,8 @@
         $('#msg').val('');
         var to = "${param.get("to")}";
         var name = "${param.get("name")}"
-        var message = {"from":'${email}', 'to':[{'email':to, 'name':name}], 'msg':msg};
+        var emoticon = $('.emo-chat > img').attr('src');
+        var message = {"from":'${email}', 'to':[{'email':to, 'name':name}], 'msg':msg , 'emoticon':emoticon};
         stomp.send("/app/msg", {}, JSON.stringify(message));
     }
 

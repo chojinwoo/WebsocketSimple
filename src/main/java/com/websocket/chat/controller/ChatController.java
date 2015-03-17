@@ -2,6 +2,7 @@ package com.websocket.chat.controller;
 
 import com.websocket.chat.vo.ChatVo;
 import com.websocket.common.util.Converter;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -12,10 +13,14 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.lang.reflect.Field;
 import java.security.Principal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -34,6 +39,20 @@ public class ChatController {
     public void msg(Principal principal, @Payload ChatVo chatVo) {
         List<HashMap> userList = chatVo.getTo();
 
+        /*시간 및 플래그 주입*/
+
+        TimeZone tz = TimeZone.getTimeZone("Asia/Seoul");
+        SimpleDateFormat sdf = new SimpleDateFormat("a h:m");
+        sdf.setTimeZone(tz);
+        String time = sdf.format(new Date());
+        sdf = new SimpleDateFormat("M월 d일");
+        sdf.setTimeZone(tz);
+        String date = sdf.format(new Date());
+
+        chatVo.setFlag("1");
+        chatVo.setDate(date);
+        chatVo.setTime(time);
+
         createRoom(chatVo);
         addMessage(chatVo);
         for(HashMap user: userList) {
@@ -44,22 +63,56 @@ public class ChatController {
         System.out.println(roomMap.toString());
     }
 
+    @RequestMapping(value="/chatInit", method = RequestMethod.POST)
+    @ResponseBody
+    public String chatInit(@RequestParam("to") String to, Principal principal) {
+        JSONArray ja = new JSONArray();
+        List<HashMap> roomList = (List) myRoomMap.get(principal.getName());
+
+        if(roomList != null) {
+            for(HashMap room : roomList) {
+                String room_to = (String) room.get("name");
+                if(room_to.equals(to)) {
+                    String roomId = (String) room.get("room");
+                    List msgLIst = (List) roomMap.get(roomId);
+                    ja.add(msgLIst);
+                }
+            }
+        }
+
+        return ja.toString();
+    }
+
     public void createRoom(ChatVo chatVo) {
         if(chatVo.getRoomId() == null) {
             String uuid = UUID.randomUUID().toString();
             chatVo.setRoomId(uuid);
             List<HashMap> userLIst = chatVo.getTo();
 
+            HashMap map = new HashMap();
             List roomList = null;
             for (HashMap user : userLIst) {
                 roomList = (List) myRoomMap.get(user.get("email"));
                 if (roomList == null) {
                     roomList = new LinkedList();
                 }
-                roomList.add(uuid);
+                map = new HashMap();
+                map.put("name", chatVo.getFrom());
+                map.put("room", uuid);
+                roomList.add(map);
                 myRoomMap.put(user.get("email"), roomList);
+
+                roomList = (List) myRoomMap.get(chatVo.getFrom());
+                if (roomList == null) {
+                    roomList = new LinkedList();
+                }
+
+                map = new HashMap();
+                map.put("name", user.get("email"));
+                map.put("room", uuid);
+                roomList.add(map);
+                myRoomMap.put(chatVo.getFrom(), roomList);
             }
-            myRoomMap.put(chatVo.getFrom(), roomList);
         }
     }
 

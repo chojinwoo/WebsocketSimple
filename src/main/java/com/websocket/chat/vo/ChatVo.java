@@ -18,16 +18,24 @@ public class ChatVo {
     private String from;
     private List to;
     private String msg;
+    private String emoticon;
     private String roomId;
+    private String date;
+    private String time;
+    private String flag;
 
     public ChatVo() {
     }
 
-    public ChatVo(String from, List to, String msg, String roomId) {
+    public ChatVo(String from, List to, String msg, String emoticon, String roomId, String date, String time, String flag) {
         this.from = from;
         this.to = to;
         this.msg = msg;
+        this.emoticon = emoticon;
         this.roomId = roomId;
+        this.date = date;
+        this.time = time;
+        this.flag = flag;
     }
 
     public String getFrom() {
@@ -55,11 +63,43 @@ public class ChatVo {
         this.msg = msg;
     }
 
+    public String getEmoticon() {
+        return emoticon;
+    }
+
+    public void setEmoticon(String emoticon) {
+        this.emoticon = emoticon;
+    }
+
     public String getRoomId() {
         return roomId;
     }
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 }
