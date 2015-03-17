@@ -75,7 +75,7 @@ public class ChatController {
                 if(room_to.equals(to)) {
                     String roomId = (String) room.get("room");
                     List msgLIst = (List) roomMap.get(roomId);
-                    ja.add(msgLIst);
+                    ja.addAll(msgLIst);
                 }
             }
         }

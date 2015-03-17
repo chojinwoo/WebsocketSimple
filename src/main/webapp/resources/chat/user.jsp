@@ -43,21 +43,18 @@
     </style>
 </head>
 <body>
-<div class="chat-body">
-    <div class="list hide">
-        <input type="hidden" id="to" name="to" value="">
-        <span><img class="user-view" src=""></span>
-        <span></span>
-        <span class="pull-right"><i class="fa fa-weixin chat-icon"></i></span>
-    </div>
-    <div class="group"><span>나</span></div>
-    <div class="list">
-        <span><img class="user-view" src="/resources/img/face.png"></span>
-        <span>${name}</span>
-    </div>
-    <div class="group"><span>친구</span></div>
-
+<div class="list hide">
+    <input type="hidden" id="to" name="to" value="">
+    <span><img class="user-view" src=""></span>
+    <span></span>
+    <span class="pull-right"><i class="fa fa-weixin chat-icon"></i></span>
 </div>
+<div class="group"><span>나</span></div>
+<div class="list">
+    <span><img class="user-view" src="/resources/img/face.png"></span>
+    <span>${name}</span>
+</div>
+<div class="group"><span>친구</span></div>
 <script>
     $(document).ready(function() {
         $.ajax({
@@ -82,7 +79,7 @@
         $('.chat-icon').on('click', function() {
             var to = $(this).closest('div').find('#to').val();
             var name = $(this).closest('div').find('span:eq(1)').text();
-            $('#load-body').load("/resources/chat/chat.jsp", {"to":to, "name":name});
+            $('.chat-body').load("/resources/chat/chat.jsp", {"to":to, "name":name});
         })
 
     })

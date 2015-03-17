@@ -18,7 +18,6 @@
             position: absolute;
             font-size: 30px;
             left: 3px;
-            bottom: 5px;
             cursor:pointer;
         }
 
@@ -27,7 +26,6 @@
             font-size: 30px;
             right: 53px;
             z-index: 2;
-            bottom: 5px;
             cursor:pointer;
         }
 
@@ -104,62 +102,59 @@
     }
 
     #toChat .content {
-        background-color: aqua;
+        background-color: #a5d8c7;
         padding: 5px;
-        max-width: 80%;
+        max-width: 70%;
     }
 
     #toChat .date {
         padding-left:15px;
+        font-size:12px;
     }
 
     #fromChat .content {
-        background-color: aqua;
+        background-color: #a5d8c7;
         padding: 5px;
-        max-width: 80%;
+        max-width: 70%;
     }
 
     #fromChat .date {
         padding-right:15px;
+        font-size:10px;
     }
 
     #fromChat .emoticon {
         text-align: right;
     }
 </style>
-<div class="chat-body">
-    <div id="toChat" class="chat-detail hide">
-        <div class="pull-left" style="  width: 50px;">
-            <img src="/resources/img/face.png" style="width:40px;border-radius: 50%">
-        </div>
-        <div class="pull-left" style="margin-left:10px;width:80%;">
-            <div>1</div>
-            <div class="emoticon"><img style="width:100px"></div>
-            <div class="pull-left content"></div>
-            <div class="pull-left date"></div>
-        </div>
+<div id="toChat" class="chat-detail hide">
+    <div class="pull-left" style="  width: 40px;">
+        <img src="/resources/img/face.png" style="width:40px;border-radius: 50%">
     </div>
-    <div id="fromChat" class="chat-detail hide">
-        <div class="pull-right" style="margin-left:10px;width:80%;">
-            <div class="emoticon"><img style="width:100px"></div>
-            <div class="pull-right content"></div>
-            <div class="pull-right date"></div>
-        </div>
+    <div class="pull-left" style="margin-left:10px;width:80%;">
+        <div>1</div>
+        <div class="emoticon"></div>
+        <div class="pull-left content"></div>
+        <div class="pull-left date"></div>
     </div>
-    <%--<blockquote class="blockquote-reverse">--%>
-        <%--asdf--%>
-    <%--</blockquote>--%>
-    <div id="input" style="position:fixed; bottom: 0px;">
-        <div class="emo-chat">
-            <img src="">
-            <span class="glyphicon glyphicon-remove-sign emo-cancel"></span>
-        </div>
-        <div class="input-group" style="background-color:#F0F0F0;height:42px;padding:4px 0px 4px 32px;">
-            <span class="file-btn" aria-hidden="true"><i class="fa fa-plus"></i></span>
-            <input type="text" id="msg" class="form-control" style="padding-right: 35px;">
-            <span class="emo-btn" aria-hidden="true"><i class="fa fa-smile-o fa-smile"></i></span>
-            <span class="input-group-addon btn btn-default send-btn">전송</span>
-        </div>
+</div>
+<div id="fromChat" class="chat-detail hide">
+    <div class="pull-right" style="\width:100%;">
+        <div class="emoticon"></div>
+        <div class="pull-right content"></div>
+        <div class="pull-right date"></div>
+    </div>
+</div>
+<div id="input" style="position:fixed; bottom: 0px;">
+    <div class="emo-chat">
+        <img src="">
+        <span class="glyphicon glyphicon-remove-sign emo-cancel"></span>
+    </div>
+    <div class="input-group" style="background-color:#F0F0F0;height:42px;padding:4px 0px 4px 32px;">
+        <span class="file-btn" aria-hidden="true"><i class="fa fa-plus"></i></span>
+        <input type="text" id="msg" class="form-control" style="padding-right: 35px;">
+        <span class="emo-btn" aria-hidden="true"><i class="fa fa-smile-o fa-smile"></i></span>
+        <span class="input-group-addon btn btn-default send-btn">전송</span>
     </div>
 </div>
 <script>
@@ -170,15 +165,16 @@
             type:'post',
             data:'to=${param.get("to")}',
             success:function(data) {
-                alert(JSON.stringify(data));
+                for(var i=0; i<data.length; i++) {
+                    $.receive(data[i]);
+                }
             }, error:function(xhr, status, error) {
                 alert(error);
             }
         })
     })
 
-    $.receive = function(message) {
-        var json = JSON.parse(message.body);
+    $.receive = function(json) {
         var clone = '';
         if(json.from == '${email}') {
             clone = $('#fromChat').clone().removeClass('hide');
@@ -186,7 +182,8 @@
             clone =$('#toChat').clone().removeClass('hide');
         }
         if(json.emoticon != '') {
-            clone.find('.emoticon img').attr('src', json.emoticon);
+            var img = $('<img>').attr('src', json.emoticon).css('width', '100px');
+            clone.find('.emoticon').append(img);
         }
         clone.find('.content').text(json.msg);
         clone.find('.date').text(json.time);

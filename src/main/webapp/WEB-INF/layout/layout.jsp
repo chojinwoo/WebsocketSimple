@@ -8,6 +8,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE HTML>
 <html>
 <head>
     <meta charset="utf-8">
@@ -43,7 +44,8 @@
             stomp.connect([], function(frame) {
                 console.log(frame);
                 stomp.subscribe("/user/topic/msg", function(message) {
-                    $.receive(message);
+                    var json = JSON.parse(message.body);
+                    $.receive(json);
                 });
 
                 stomp.subscribe("/user/queue/errors", function(message) {
@@ -57,26 +59,49 @@
     </script>
     <style>
         .chat-body {
-            padding-top:60px;
-            padding-bottom:60px;
-            height:100%;
+            padding-top: 60px;
+            padding-bottom: 50px;
+            position: absolute;
+            width: 100%;
+        }
+
+        .chat-header {
+            width:100%;
+            height:50px;
+            position:fixed;
+            background-color:#a5d8c7;
+            top:0px;
+            border-radius: 5px;
+            -moz-border-radius: 6px;
+            padding:10px;
+            z-index: 2;
+        }
+
+        .chat-header > span > .active {
+            color:darkgreen;
+        }
+
+        .chat-header .fa {
+            font-size:35px;
+            margin-left:6px;
+            margin-right: 6px;
         }
     </style>
 </head>
 <body>
-    <div>
-        <tiles:insertAttribute name="header"/>
+    <div class="chat-header">
+    <tiles:insertAttribute name="header"/>
     </div>
-    <div id="load-body">
-        <tiles:insertAttribute name="body"/>
+    <div class="chat-body">
+    <tiles:insertAttribute name="body"/>
     </div>
 <script>
     $(document).ready(function() {
 
-        $('#load-body').load("/resources/chat/user.jsp");
+        $('.chat-body').load("/resources/chat/user.jsp");
 
         $('.chat-header .fa-user').on('click' , function() {
-            $('#load-body').load("/resources/chat/user.jsp");
+            $('.chat-body').load("/resources/chat/user.jsp");
         })
     })
 </script>
