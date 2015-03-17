@@ -16,6 +16,7 @@ import java.util.List;
 @Controller
 public class ChatVo {
     private String from;
+    private String fromName;
     private List to;
     private String msg;
     private String emoticon;
@@ -27,8 +28,9 @@ public class ChatVo {
     public ChatVo() {
     }
 
-    public ChatVo(String from, List to, String msg, String emoticon, String roomId, String date, String time, String flag) {
+    public ChatVo(String from, String fromName, List to, String msg, String emoticon, String roomId, String date, String time, String flag) {
         this.from = from;
+        this.fromName = fromName;
         this.to = to;
         this.msg = msg;
         this.emoticon = emoticon;
@@ -39,12 +41,19 @@ public class ChatVo {
     }
 
     public String getFrom() {
-
         return from;
     }
 
     public void setFrom(String from) {
         this.from = from;
+    }
+
+    public String getFromName() {
+        return fromName;
+    }
+
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
     }
 
     public List getTo() {

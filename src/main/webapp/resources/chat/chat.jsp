@@ -208,7 +208,7 @@
         var to = "${param.get("to")}";
         var name = "${param.get("name")}"
         var emoticon = $('.emo-chat > img').attr('src');
-        var message = {"from":'${email}', 'to':[{'email':to, 'name':name}], 'msg':msg , 'emoticon':emoticon};
+        var message = {"from":'${email}', "fromName":'${name}', 'to':[{'email':to, 'name':name}], 'msg':msg , 'emoticon':emoticon};
         stomp.send("/app/msg", {}, JSON.stringify(message));
     }
 

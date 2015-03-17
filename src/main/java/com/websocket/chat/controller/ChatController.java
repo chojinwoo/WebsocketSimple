@@ -2,6 +2,7 @@ package com.websocket.chat.controller;
 
 import com.websocket.chat.vo.ChatVo;
 import com.websocket.common.util.Converter;
+import com.websocket.user.vo.UserVo;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -71,7 +74,7 @@ public class ChatController {
 
         if(roomList != null) {
             for(HashMap room : roomList) {
-                String room_to = (String) room.get("name");
+                String room_to = (String) room.get("email");
                 if(room_to.equals(to)) {
                     String roomId = (String) room.get("room");
                     List msgLIst = (List) roomMap.get(roomId);
@@ -89,7 +92,7 @@ public class ChatController {
             chatVo.setRoomId(uuid);
             List<HashMap> userLIst = chatVo.getTo();
 
-            HashMap map = new HashMap();
+            HashMap map = null;
             List roomList = null;
             for (HashMap user : userLIst) {
                 roomList = (List) myRoomMap.get(user.get("email"));
@@ -97,7 +100,8 @@ public class ChatController {
                     roomList = new LinkedList();
                 }
                 map = new HashMap();
-                map.put("name", chatVo.getFrom());
+                map.put("email", chatVo.getFrom());
+                map.put("name", chatVo.getFromName());
                 map.put("room", uuid);
                 roomList.add(map);
                 myRoomMap.put(user.get("email"), roomList);
@@ -108,7 +112,8 @@ public class ChatController {
                 }
 
                 map = new HashMap();
-                map.put("name", user.get("email"));
+                map.put("email", user.get("email"));
+                map.put("name", user.get("name"));
                 map.put("room", uuid);
                 roomList.add(map);
                 myRoomMap.put(chatVo.getFrom(), roomList);
