@@ -132,7 +132,7 @@
     <div class="pull-left" style="  width: 40px;">
         <img src="/resources/img/face.png" style="width:40px;border-radius: 50%">
     </div>
-    <div class="pull-left" style="margin-left:10px;width:80%;">
+    <div class="pull-left" style="margin-left:10px;width:95%;">
         <div>1</div>
         <div class="emoticon"></div>
         <div class="pull-left content"></div>
@@ -140,7 +140,7 @@
     </div>
 </div>
 <div id="fromChat" class="chat-detail hide">
-    <div class="pull-right" style="\width:100%;">
+    <div class="pull-right" style="width:100%;">
         <div class="emoticon"></div>
         <div class="pull-right content"></div>
         <div class="pull-right date"></div>
@@ -169,28 +169,12 @@
                 for(var i=0; i<data.length; i++) {
                     $.receive(data[i]);
                 }
+                $.listSet();
             }, error:function(xhr, status, error) {
                 alert(error);
             }
         })
     })
-
-    $.receive = function(json) {
-        var clone = '';
-        if(json.from == '${email}') {
-            clone = $('#fromChat').clone().removeClass('hide');
-        } else {
-            clone =$('#toChat').clone().removeClass('hide');
-        }
-        if(json.emoticon != '') {
-            var img = $('<img>').attr('src', json.emoticon).css('width', '100px');
-            clone.find('.emoticon').append(img);
-        }
-        $('#room').val(json.room);
-        clone.find('.content').text(json.msg);
-        clone.find('.date').text(json.time);
-        $('.chat-body').append(clone);
-    }
 
     $.emoticonChange = function() {
         var emoPage = $('#emoKind > .active > a').attr('page');

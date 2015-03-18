@@ -121,7 +121,6 @@ public class ChatController {
                         newMap.put("flagCnt", flagCnt);
                     }
                 }
-
                 newList.add(newMap);
             }
         }

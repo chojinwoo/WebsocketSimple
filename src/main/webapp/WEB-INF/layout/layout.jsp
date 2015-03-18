@@ -8,6 +8,8 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<sec:authentication property="principal.email" var="email"/>
+<sec:authentication property="principal.name" var="name"/>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -37,6 +39,60 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script>
+
+        /*대화방 리스트 정의*/
+        $.listSet = function() {
+            $.ajax({
+                url:'/listInit',
+                dataType:'json',
+                async:false,
+                type:'post',
+                success:function(data) {
+                    $('.chat-body').find('.list-detail:not(.hide)').remove();
+                    var flagTotal = 0;
+                    $.each(data, function() {
+                        var clone = $('.list-detail.hide').clone().removeClass('hide');
+                        clone.find('.list-name').text(this.name);
+                        clone.find('.list-content').text(this.msg);
+                        clone.find('.list-date').text(this.date);
+                        clone.find('#to').val(this.to);
+                        clone.find('#name').val(this.name);
+                        if(this.flagCnt != 0) {
+                            clone.find('.list-flag').removeClass('hide').text(this.flagCnt);
+                        }
+                        $('.chat-body').append(clone);
+                        flagTotal = flagTotal + this.flagCnt;
+                    })
+                    if(flagTotal == '0') {
+                        $('.header-badge').addClass('hide');
+                    } else {
+                        $('.header-badge').removeClass('hide').text(flagTotal);
+                    }
+
+                }, error:function(xhr, status, error) {
+                    alert(error);
+                }
+            })
+        }
+
+        /* 받은 메시지 정의 */
+        $.receive = function(json) {
+            var clone = '';
+            if(json.from == '${email}') {
+                clone = $('#fromChat').clone().removeClass('hide');
+            } else {
+                clone =$('#toChat').clone().removeClass('hide');
+            }
+            if(json.emoticon != '') {
+                var img = $('<img>').attr('src', json.emoticon).css('width', '100px');
+                clone.find('.emoticon').append(img);
+            }
+            $('#room').val(json.room);
+            clone.find('.content').text(json.msg);
+            clone.find('.date').text(json.time);
+            $('.chat-body').append(clone);
+        }
+
         var stomp = null;
         $(document).ready(function() {
             var ws = new SockJS("/ws");
@@ -52,10 +108,7 @@
                 stomp.subscribe("/user/queue/errors", function(message) {
                     alert(message);
                 });
-
             })
-
-
         })
     </script>
     <style>
@@ -98,7 +151,7 @@
     </div>
 <script>
     $(document).ready(function() {
-
+        $.listSet();
         $('.chat-body').load("/resources/chat/user.jsp");
 
         $('.chat-header .fa-user').on('click' , function() {

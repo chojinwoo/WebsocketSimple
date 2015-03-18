@@ -37,32 +37,6 @@
     </span>
 </div>
 <script>
-    $.listSet = function() {
-        $.ajax({
-            url:'/listInit',
-            dataType:'json',
-            async:false,
-            type:'post',
-            success:function(data) {
-                $('.chat-body').find('.list-detail:not(.hide)').empty();
-                $.each(data, function() {
-                    var clone = $('.list-detail.hide').clone().removeClass('hide');
-                    clone.find('.list-name').text(this.name);
-                    clone.find('.list-content').text(this.msg);
-                    clone.find('.list-date').text(this.date);
-                    clone.find('#to').val(this.to);
-                    clone.find('#name').val(this.name);
-                    if(this.flagCnt != 0) {
-                        clone.find('.list-flag').removeClass('hide').text(this.flagCnt);
-                    }
-                    $('.chat-body').append(clone);
-                })
-            }, error:function(xhr, status, error) {
-                alert(error);
-            }
-        })
-    }
-
     $(document).ready(function() {
         $.listSet();
 
