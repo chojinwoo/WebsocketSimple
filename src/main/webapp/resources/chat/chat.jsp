@@ -184,19 +184,24 @@
                 var src = $(this).attr("src");
                 $('.emo-chat > img').attr('src', src);
                 $('.emo-chat').show('slide', 300);
+                $('#emoModal').modal('hide');
             })
         });
     }
 
     $.msgSend = function() {
         var msg = $('#msg').val();
-        $('#msg').val('');
-        var to = "${param.get("to")}";
-        var name = "${param.get("name")}"
         var emoticon = $('.emo-chat > img').attr('src');
-        var room = $('#room').val();
-        var message = {"from":'${email}', "fromName":'${name}', 'to':[{'email':to, 'name':name}], 'msg':msg , 'room':room,'emoticon':emoticon};
-        stomp.send("/app/msg", {}, JSON.stringify(message));
+        if(msg != ''|| emoticon != '') {
+            $('#msg').val('');
+            var to = "${param.get("to")}";
+            var name = "${param.get("name")}"
+            var room = $('#room').val();
+            var message = {"from":'${email}', "fromName":'${name}', 'to':[{'email':to, 'name':name}], 'msg':msg , 'room':room,'emoticon':emoticon};
+            $('.emo-chat > img').removeAttr('src');
+            $('.emo-chat').hide('slide', 200);
+            stomp.send("/app/msg", {}, JSON.stringify(message));
+        }
     }
 
     $.flagChk = function() {
@@ -208,6 +213,7 @@
     })
 
     $('.emo-cancel').on('click', function() {
+        $('.emo-chat > img').removeAttr('src');
         $('.emo-chat').hide('slide', 300);
     })
 

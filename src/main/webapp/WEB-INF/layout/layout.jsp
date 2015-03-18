@@ -87,8 +87,13 @@
                 var img = $('<img>').attr('src', json.emoticon).css('width', '100px');
                 clone.find('.emoticon').append(img);
             }
+            if(json.msg == '') {
+                clone.find('.content').addClass('hide');
+            } else {
+                clone.find('.content').text(json.msg);
+            }
+
             $('#room').val(json.room);
-            clone.find('.content').text(json.msg);
             clone.find('.date').text(json.time);
             $('.chat-body').append(clone);
         }
@@ -101,7 +106,9 @@
                 console.log(frame);
                 stomp.subscribe("/user/topic/msg", function(message) {
                     var json = JSON.parse(message.body);
-                    $.receive(json);
+                    if($('.chat-body #emoModal').index()> -1) {
+                        $.receive(json);
+                    }
                     $.listSet();
                 });
 

@@ -39,7 +39,6 @@
 <script>
     $(document).ready(function() {
         $.listSet();
-
         $('.list-detail').on('click', function() {
             var to = $(this).find('#to').val();
             var name = $(this).find('#name').val();
